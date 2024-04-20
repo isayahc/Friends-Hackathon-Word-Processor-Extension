@@ -11,6 +11,7 @@ from langchain_community.embeddings.sentence_transformer import (
 from langchain_community.vectorstores import Chroma
 import arxiv
 import ast
+from langchain_mistralai import ChatMistralAI
 
 # import chromadb
 
@@ -187,3 +188,6 @@ def google_search(query: str) -> str:
     all_sources += cleaner_sources    
     
     return cleaner_sources.__str__()
+
+if __name__ == "__main__":
+    pass
