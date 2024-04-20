@@ -15,28 +15,21 @@ from langchain_mistralai import ChatMistralAI
 from dotenv import load_dotenv
 import os
 from langchain_community.llms import HuggingFaceEndpoint
+from langchain.tools.render import render_text_description
+
+from langchain.agents import AgentExecutor
+from langchain.agents.format_scratchpad import format_log_to_str
+from langchain.agents.output_parsers import ReActJsonSingleInputOutputParser
+# Import things that are needed generically
+from langchain.tools.render import render_text_description
+from langchain.prompts import PromptTemplate
+from react_json_with_memory import template_system
+from utils import format_arxiv_documents, parse_list_to_dicts, format_search_results, format_wiki_summaries
+from source_container import all_sources
 
 load_dotenv()
 
-MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
-HUGGINGFACEHUB_API_TOKEN = os.getenv('HUGGINGFACEHUB_API_TOKEN')
 
-model = ChatMistralAI(model="mistral-large-latest")
-
-
-chat = ChatMistralAI(api_key=MISTRAL_API_KEY)
-
-llm = HuggingFaceEndpoint(repo_id="mistralai/Mixtral-8x7B-Instruct-v0.1", 
-                          temperature=0.1, 
-                          max_new_tokens=1024,
-                          repetition_penalty=1.2,
-                          return_full_text=False
-    )
-
-
-
-
-x = 0
 
 # import chromadb
 
@@ -57,7 +50,6 @@ x = 0
 # from innovation_pathfinder_ai.utils.utils import (
 #     create_wikipedia_urls_from_text, create_folder_if_not_exists,
 # )
-import os
 # from innovation_pathfinder_ai.utils import create_wikipedia_urls_from_text
 
 # persist_directory = os.getenv('VECTOR_DATABASE_LOCATION')
@@ -89,31 +81,31 @@ import os
     
 #     return docs.__str__()
 
-@tool
-def knowledgeBase_search(query:str) -> str:
-    """Search the internal knowledge base for research papers and relevent chunks"""
-    # Since we have more than one collections we should change the name of this tool
-    client = chromadb.PersistentClient(
-     path=persist_directory,
-    )
+# @tool
+# def knowledgeBase_search(query:str) -> str:
+#     """Search the internal knowledge base for research papers and relevent chunks"""
+#     # Since we have more than one collections we should change the name of this tool
+#     client = chromadb.PersistentClient(
+#      path=persist_directory,
+#     )
     
-    collection_name="ArxivPapers"
-    #store using envar
+#     collection_name="ArxivPapers"
+#     #store using envar
     
-    embedding_function = SentenceTransformerEmbeddings(
-        model_name=os.getenv("EMBEDDING_MODEL"),
-        )
+#     embedding_function = SentenceTransformerEmbeddings(
+#         model_name=os.getenv("EMBEDDING_MODEL"),
+#         )
     
-    vector_db = Chroma(
-    client=client, # client for Chroma
-    collection_name=collection_name,
-    embedding_function=embedding_function,
-    )
+#     vector_db = Chroma(
+#     client=client, # client for Chroma
+#     collection_name=collection_name,
+#     embedding_function=embedding_function,
+#     )
     
-    retriever = vector_db.as_retriever()
-    docs = retriever.get_relevant_documents(query)
+#     retriever = vector_db.as_retriever()
+#     docs = retriever.get_relevant_documents(query)
     
-    return docs.__str__()
+#     return docs.__str__()
 
 @tool
 def arxiv_search(query: str) -> str:
@@ -126,7 +118,7 @@ def arxiv_search(query: str) -> str:
     formatted_sources = format_arxiv_documents(data)
     all_sources += formatted_sources
     parsed_sources = parse_list_to_dicts(formatted_sources)
-    add_many(parsed_sources)
+    # add_many(parsed_sources)
   
     return data.__str__()
 
@@ -162,14 +154,14 @@ def embed_arvix_paper(paper_id:str) -> None:
     pdf_file_name = f"{number_without_period}.pdf"
     
     pdf_directory = "./downloaded_papers"
-    create_folder_if_not_exists(pdf_directory)
+    # create_folder_if_not_exists(pdf_directory)
     
     # Download the PDF to a specified directory with a custom filename.
     paper.download_pdf(dirpath=pdf_directory, filename=f"{number_without_period}.pdf")
     
-    client = chromadb.PersistentClient(
-     path=persist_directory,
-    )
+    # client = chromadb.PersistentClient(
+    #  path=persist_directory,
+    # )
     
     collection_name="ArxivPapers"
     #store using envar
@@ -180,10 +172,10 @@ def embed_arvix_paper(paper_id:str) -> None:
     
     full_path = os.path.join(pdf_directory, pdf_file_name)
     
-    add_pdf_to_vector_store(
-        collection_name=collection_name,
-        pdf_file_location=full_path,
-    )
+    # add_pdf_to_vector_store(
+    #     collection_name=collection_name,
+    #     pdf_file_location=full_path,
+    # )
     
 @tool
 def wikipedia_search(query: str) -> str:
@@ -196,7 +188,7 @@ def wikipedia_search(query: str) -> str:
     formatted_summaries = format_wiki_summaries(wikipedia_results)
     all_sources += formatted_summaries
     parsed_summaries = parse_list_to_dicts(formatted_summaries)
-    add_many(parsed_summaries)
+    # add_many(parsed_summaries)
     #all_sources += create_wikipedia_urls_from_text(wikipedia_results)
     return wikipedia_results
 
@@ -209,10 +201,76 @@ def google_search(query: str) -> str:
     search_results:dict = websearch.results(query, 3)
     cleaner_sources =format_search_results(search_results)
     parsed_csources = parse_list_to_dicts(cleaner_sources)
-    add_many(parsed_csources)
+    # add_many(parsed_csources)
     all_sources += cleaner_sources    
     
     return cleaner_sources.__str__()
 
 if __name__ == "__main__":
+    MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+    HUGGINGFACEHUB_API_TOKEN = os.getenv('HUGGINGFACEHUB_API_TOKEN')
+
+    model = ChatMistralAI(model="mistral-large-latest")
+
+
+    chat = ChatMistralAI(api_key=MISTRAL_API_KEY)
+
+    llm = HuggingFaceEndpoint(repo_id="mistralai/Mixtral-8x7B-Instruct-v0.1", 
+                            temperature=0.1, 
+                            max_new_tokens=1024,
+                            repetition_penalty=1.2,
+                            return_full_text=False
+        )
+    
+    tools = [
+        # memory_search,
+        # knowledgeBase_search,
+        arxiv_search,
+        wikipedia_search,
+        google_search,
+    #    get_arxiv_paper,
+        ]
+
+    prompt = PromptTemplate.from_template(
+        template=template_system
+    )
+    prompt = prompt.partial(
+        tools=render_text_description(tools),
+        tool_names=", ".join([t.name for t in tools]),
+    )
+    
+    chat_model_with_stop = llm.bind(stop=["\nObservation"])
+    agent = (
+        {
+            "input": lambda x: x["input"],
+            "agent_scratchpad": lambda x: format_log_to_str(x["intermediate_steps"]),
+            "chat_history": lambda x: x["chat_history"],
+        }
+        | prompt
+        | chat_model_with_stop
+        | ReActJsonSingleInputOutputParser()
+    )
+
+    # instantiate AgentExecutor
+    agent_executor = AgentExecutor(
+        agent=agent, 
+        tools=tools, 
+        verbose=True,
+        max_iterations=10,       # cap number of iterations
+        #max_execution_time=60,  # timout at 60 sec
+        return_intermediate_steps=True,
+        handle_parsing_errors=True,
+        )
+    
+    sample = agent_executor.invoke(
+            {
+                "input": " Humphrey Bogart has won several snooker world championships.",
+                "chat_history": []
+            }
+    )
+
+
+
+
+    x = 0
     pass
