@@ -14,14 +14,25 @@ import ast
 from langchain_mistralai import ChatMistralAI
 from dotenv import load_dotenv
 import os
+from langchain_community.llms import HuggingFaceEndpoint
 
 load_dotenv()
 
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+HUGGINGFACEHUB_API_TOKEN = os.getenv('HUGGINGFACEHUB_API_TOKEN')
 
 model = ChatMistralAI(model="mistral-large-latest")
 
+
 chat = ChatMistralAI(api_key=MISTRAL_API_KEY)
+
+llm = HuggingFaceEndpoint(repo_id="mistralai/Mixtral-8x7B-Instruct-v0.1", 
+                          temperature=0.1, 
+                          max_new_tokens=1024,
+                          repetition_penalty=1.2,
+                          return_full_text=False
+    )
+
 
 
 
