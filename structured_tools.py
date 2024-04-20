@@ -12,6 +12,20 @@ from langchain_community.vectorstores import Chroma
 import arxiv
 import ast
 from langchain_mistralai import ChatMistralAI
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+
+model = ChatMistralAI(model="mistral-large-latest")
+
+chat = ChatMistralAI(api_key=MISTRAL_API_KEY)
+
+
+
+x = 0
 
 # import chromadb
 
