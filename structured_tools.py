@@ -262,9 +262,16 @@ if __name__ == "__main__":
         handle_parsing_errors=True,
         )
     
+    # sample = agent_executor.invoke(
+    #         {
+    #             "input": " Humphrey Bogart has won several snooker world championships.",
+    #             "chat_history": []
+    #         }
+    # )
+    
     sample = agent_executor.invoke(
             {
-                "input": " Humphrey Bogart has won several snooker world championships.",
+                "input": "Magnus Carlsen won the 2018 FIDE World Chess Championship[cit].",
                 "chat_history": []
             }
     )

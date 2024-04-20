@@ -21,7 +21,7 @@ The $JSON_BLOB should only contain a SINGLE action, do NOT return a list of mult
 
 ALWAYS use the following format:
 
-Question: the input question you must answer
+Question: you will be given a fact. You must find the source of this fact. Please structure the reponse as APA format
 Thought: you should always think about what to do
 Action:
 ```
