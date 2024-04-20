@@ -2,3 +2,4 @@ arxiv # to acess arxiv as a retreiever
 langchain-community # for access to the main module
 langchain  # for acess to tools
 langchain-mistralai # to acess langchain library
+python-dotenv
