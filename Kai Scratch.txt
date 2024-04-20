@@ -1,0 +1,41 @@
+TASKS
+Research different word processors that support extensions
+
+
+Research LLM apis that give references / sources
+~ Perplexity AI
+
+Diagram to show the user-flow
+Presentation
+README
+EXTENSION
+> Live reading of user input, matching on the [cit]
+> Formatting of bottom citation section
+CITATION CREATION
+> Grab right amount of text as context
+> Format the response
+
+
+In what ways is this an MVP
+Grab a single sentence
+
+
+Python
+
+EXAMPLE
+given Boolean formula, introduced by Valiant in 1979.[1] In other words, it asks in how many ways the variables of a given Boolean formula can be consistently replaced by the values TRUE or FALSE in such a way that the formula evaluates to TRUE. For example, the formula a ∨ ¬ b {\displaystyle a\lor \neg b} is satisfiable by three distinct boolean value assignments of the variables, namely, for any of the assignments ( a {\displaystyle a} = TRUE, b {\displaystyle b} = FALSE), ( a {\displaystyle a} = FALSE, b {\displaystyle b} = FALSE), and ( a {\displaystyle a} = TRUE, b {\displaystyle b} = TRUE), we have a ∨ ¬ b = TRUE . {\displaystyle a\lor \neg b={\textsf {TRUE}}.}
+#SAT is different from Boolean satisfiability problem (SAT), which asks if there exists a solution of Boolean formula. [citation needed]
+[cit]
+
+in standard citation format
+[1] -- whatever.com 
+
+Question : how does it know how much is the context
+
+Text processor
+
+
+
+LLM that we're accessing
+
+
