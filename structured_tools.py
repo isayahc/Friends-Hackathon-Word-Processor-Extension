@@ -26,7 +26,9 @@ from langchain.prompts import PromptTemplate
 from react_json_with_memory import template_system
 from utils import format_arxiv_documents, parse_list_to_dicts, format_search_results, format_wiki_summaries
 from source_container import all_sources
-
+from langchain_community.chat_models.anthropic import (
+    ChatAnthropic
+    )
 load_dotenv()
 
 
@@ -206,78 +208,85 @@ def google_search(query: str) -> str:
     
     return cleaner_sources.__str__()
 
-if __name__ == "__main__":
-    MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
-    HUGGINGFACEHUB_API_TOKEN = os.getenv('HUGGINGFACEHUB_API_TOKEN')
+# if __name__ == "__main__":
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+HUGGINGFACEHUB_API_TOKEN = os.getenv('HUGGINGFACEHUB_API_TOKEN')
+ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY')
 
-    model = ChatMistralAI(model="mistral-large-latest")
+
+model = ChatMistralAI(model="mistral-large-latest")
 
 
-    chat = ChatMistralAI(api_key=MISTRAL_API_KEY)
+# chat = ChatMistralAI(api_key=MISTRAL_API_KEY)
 
-    llm = HuggingFaceEndpoint(repo_id="mistralai/Mixtral-8x7B-Instruct-v0.1", 
-                            temperature=0.1, 
-                            max_new_tokens=1024,
-                            repetition_penalty=1.2,
-                            return_full_text=False
-        )
-    
-    tools = [
-        # memory_search,
-        # knowledgeBase_search,
-        arxiv_search,
-        wikipedia_search,
-        google_search,
-    #    get_arxiv_paper,
-        ]
-
-    prompt = PromptTemplate.from_template(
-        template=template_system
-    )
-    prompt = prompt.partial(
-        tools=render_text_description(tools),
-        tool_names=", ".join([t.name for t in tools]),
-    )
-    
-    chat_model_with_stop = llm.bind(stop=["\nObservation"])
-    agent = (
-        {
-            "input": lambda x: x["input"],
-            "agent_scratchpad": lambda x: format_log_to_str(x["intermediate_steps"]),
-            "chat_history": lambda x: x["chat_history"],
-        }
-        | prompt
-        | chat_model_with_stop
-        | ReActJsonSingleInputOutputParser()
+llm = HuggingFaceEndpoint(repo_id="mistralai/Mixtral-8x7B-Instruct-v0.1", 
+                        temperature=0.1, 
+                        max_new_tokens=1024,
+                        repetition_penalty=1.2,
+                        return_full_text=False
     )
 
-    # instantiate AgentExecutor
-    agent_executor = AgentExecutor(
-        agent=agent, 
-        tools=tools, 
-        verbose=True,
-        max_iterations=10,       # cap number of iterations
-        #max_execution_time=60,  # timout at 60 sec
-        return_intermediate_steps=True,
-        handle_parsing_errors=True,
-        )
-    
-    # sample = agent_executor.invoke(
-    #         {
-    #             "input": " Humphrey Bogart has won several snooker world championships.",
-    #             "chat_history": []
-    #         }
-    # )
-    
-    sample = agent_executor.invoke(
-            {
-                "input": "Magnus Carlsen won the 2018 FIDE World Chess Championship[cit].",
-                "chat_history": []
-            }
+# llm = ChatAnthropic(
+#     anthropic_api_key=ANTHROPIC_API_KEY,
+#     model_name="claude-3-opus-20240229",
+#     )
+
+tools = [
+    # memory_search,
+    # knowledgeBase_search,
+    # arxiv_search,
+    wikipedia_search,
+    google_search,
+#    get_arxiv_paper,
+    ]
+
+prompt = PromptTemplate.from_template(
+    template=template_system
+)
+prompt = prompt.partial(
+    tools=render_text_description(tools),
+    tool_names=", ".join([t.name for t in tools]),
+)
+
+chat_model_with_stop = llm.bind(stop=["\nObservation"])
+agent = (
+    {
+        "input": lambda x: x["input"],
+        "agent_scratchpad": lambda x: format_log_to_str(x["intermediate_steps"]),
+        # "chat_history": lambda x: x["chat_history"],
+    }
+    | prompt
+    | chat_model_with_stop
+    | ReActJsonSingleInputOutputParser()
+)
+
+# instantiate AgentExecutor
+agent_executor = AgentExecutor(
+    agent=agent, 
+    tools=tools, 
+    verbose=True,
+    max_iterations=10,       # cap number of iterations
+    #max_execution_time=60,  # timout at 60 sec
+    return_intermediate_steps=True,
+    handle_parsing_errors=True,
     )
 
+# sample = agent_executor.invoke(
+#         {
+#             "input": " Humphrey Bogart has won several snooker world championships.",
+#             "chat_history": []
+#         }
+# )
+
+# sample = agent_executor.invoke(
+#         {
+#             "input": "Magnus Carlsen won the 2018 FIDE World Chess Championship[cit].",
+#             "chat_history": []
+#         }
+# )
 
 
 
-    x = 0
-    pass
+
+# x = 0
+# pass
