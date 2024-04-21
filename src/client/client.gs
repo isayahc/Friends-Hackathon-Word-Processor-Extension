@@ -56,8 +56,8 @@ function insertCitation (cit_number) {
     let context = everythingBefore.substring(everythingBefore.length - CHARS_BEFORE);
     let citation = get_citation(context);
 
-    // If the context is null, it should 
-    if (citation === null) {
+    // If the context is null, alert user
+    if (citation === null || citation == "False") {
       let replacement = '[' + NO_CONTEXT_CITATION + ']';
       text.insertText(start, replacement);
 
