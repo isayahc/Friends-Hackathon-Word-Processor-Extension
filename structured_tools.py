@@ -236,7 +236,7 @@ tools = [
     # knowledgeBase_search,
     # arxiv_search,
     wikipedia_search,
-    google_search,
+    # google_search,
 #    get_arxiv_paper,
     ]
 
