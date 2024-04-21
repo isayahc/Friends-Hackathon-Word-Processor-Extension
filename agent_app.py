@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
-from structured_tools import agent_executor
-from cite_recognition_chain import cite_chain
+from src.server.structured_tools import agent_executor
+from src.server.cite_recognition_chain import cite_chain
 
 app = Flask(__name__)
 
