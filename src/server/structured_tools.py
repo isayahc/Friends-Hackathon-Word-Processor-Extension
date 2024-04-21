@@ -23,9 +23,9 @@ from langchain.agents.output_parsers import ReActJsonSingleInputOutputParser
 # Import things that are needed generically
 from langchain.tools.render import render_text_description
 from langchain.prompts import PromptTemplate
-from react_json_with_memory import template_system
-from utils import format_arxiv_documents, parse_list_to_dicts, format_search_results, format_wiki_summaries
-from source_container import all_sources
+from src.server.react_json_with_memory import template_system
+from src.server.utils import format_arxiv_documents, parse_list_to_dicts, format_search_results, format_wiki_summaries
+from src.server.source_container import all_sources
 from langchain_community.chat_models.anthropic import (
     ChatAnthropic
     )
