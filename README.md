@@ -3,6 +3,8 @@ A word-processor extension which automatically replaces [cit] with the relevant 
 
 Helps users to automatically generate citation for the papers or presentations they are creating, instead of having to search the web for justifying evidence.
 
+![Alt text](logo.webp?raw=true "Title")
+
 ## Example
     Magnus Carlsen won the 2018 FIDE World Chess Championship[cit]. 
 
