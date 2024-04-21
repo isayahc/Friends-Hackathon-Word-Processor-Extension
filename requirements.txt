@@ -1,0 +1,11 @@
+arxiv # to acess arxiv as a retreiever
+langchain-community # for access to the main module
+langchain  # for acess to tools
+langchain-mistralai # to acess langchain library
+anthropic
+python-dotenv
+langchain-anthropic
+wikipedia
+google-api-python-client>=2.100.0 # to access google tools
+flask
+gradio
