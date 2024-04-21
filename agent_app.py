@@ -52,9 +52,10 @@ def query():
             is_fact_true:bool = False
         else:
             is_fact_true = True
+    
+    finally:
 
-
-    return jsonify(result)
+        return jsonify(result)
 
 if __name__ == '__main__':
     app.run(debug=True)
