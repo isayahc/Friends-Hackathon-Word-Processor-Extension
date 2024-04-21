@@ -1,6 +1,6 @@
 TASKS
 Research different word processors that support extensions
-
+> Google doc 
 
 Research LLM apis that give references / sources
 ~ Perplexity AI
@@ -15,17 +15,29 @@ CITATION CREATION
 > Grab right amount of text as context
 > Format the response
 
+CHOICES
+No citation found goes inline, 
+
+NOT DONE
+Error handling on server responses
+
 
 In what ways is this an MVP
 Grab a single sentence
-
+LLM is sus
+Only works on single word-processor
 
 Python
 
 EXAMPLE
 given Boolean formula, introduced by Valiant in 1979.[1] In other words, it asks in how many ways the variables of a given Boolean formula can be consistently replaced by the values TRUE or FALSE in such a way that the formula evaluates to TRUE. For example, the formula a ∨ ¬ b {\displaystyle a\lor \neg b} is satisfiable by three distinct boolean value assignments of the variables, namely, for any of the assignments ( a {\displaystyle a} = TRUE, b {\displaystyle b} = FALSE), ( a {\displaystyle a} = FALSE, b {\displaystyle b} = FALSE), and ( a {\displaystyle a} = TRUE, b {\displaystyle b} = TRUE), we have a ∨ ¬ b = TRUE . {\displaystyle a\lor \neg b={\textsf {TRUE}}.}
-#SAT is different from Boolean satisfiability problem (SAT), which asks if there exists a solution of Boolean formula. [citation needed]
-[cit]
+#SAT is different from Boolean satisfiability problem (SAT), 
+
+
+
+
+
+which asks if there exists a solution of Boolean formula. [cit]
 
 in standard citation format
 [1] -- whatever.com 
@@ -37,5 +49,120 @@ Text processor
 
 
 LLM that we're accessing
+
+
+
+
+
+function onOpen() {
+  main()
+
+  // ScriptApp.newTrigger('main')
+  //     .timeBased()
+  //     .everyMinutes(1)
+  //     .create();
+}
+
+function main() {
+  var doc = DocumentApp.getActiveDocument();
+  var body = doc.getBody();
+
+  // Loop until no more occurrences of [cit] are found
+  var element = body.findElement(DocumentApp.ElementType.TEXT);
+  while (element) {
+    var text = element.getElement().asText();
+    
+    var startOffset = element.getStartOffset();
+    var endOffset = element.getEndOffsetInclusive();
+    var foundText = text.getText().substring(startOffset, endOffset + 1);
+    Logger.log(foundText);
+
+
+    let a = UrlFetchApp.fetch();
+    a.
+
+    // if (foundText === "[cit]") {
+    //   // Replace [cit] with [foo]
+    //   text.replaceText("[cit]", "[foo]");
+    // }
+
+    // Find next occurrence
+    element = body.findElement(DocumentApp.ElementType.TEXT, endOffset + 1);
+  }
+
+
+
+
+
+
+  // let cit_number = getCitationsLength(body);
+  
+
+  // // Replace [cit] with [cat] throughout the document
+  // // Replace all occurrences of [cit] with incremented citation numbers
+  // // var regex = "^(?!.*\\[cit\\]).*$";
+  // body.replaceText("^(?!.*\\[cit\\]).*\\[cit\\]$", "[cat]");
+
+  // // body.replaceText("\\[cit\\]", "[" + (1 + highest_citation) + "]");
+  // body.appendParagraph("Last replacement: ");
+
+
+  // var counter = 1; // Initialize counter variable
+  
+  // // Loop through each occurrence of [n] and replace with corresponding number
+  // body.replaceText("\\[n\\]", 
+}
+
+
+
+
+
+
+
+function getCitationsLength(body) {
+  return 3;
+  // Regular expression to match numbers inside square brackets
+  var regex = /\[(\d+)\]/g;
+  
+  var numbers = [];
+  var match;
+  
+  // Loop through matches and extract numbers
+  while ((match = regex.exec(body)) !== null) {
+    numbers.push(parseInt(match[1])); // Convert matched string to integer and push to array
+  }
+  
+  // Find the highest number
+  var highestNumber = Math.max(...numbers);
+  
+  return highestNumber;
+}
+
+function sendPostRequest() {
+  // URL to which the POST request will be sent
+  var url = "https://example.com/api";
+
+  // Data to be sent in the request body
+  var payload = {
+    key1: "value1",
+    key2: "value2"
+  };
+
+  // Options for the request
+  var options = {
+    method: "post",
+    contentType: "application/json",
+    payload: JSON.stringify(payload)
+  };
+
+  // Send the POST request
+  var response = UrlFetchApp.fetch(url, options);
+
+  // Log the response content (optional)
+  Logger.log(response.getContentText());
+}
+
+
+
 
 
