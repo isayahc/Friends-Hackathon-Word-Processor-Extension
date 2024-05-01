@@ -1,0 +1,4 @@
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"query_string": "I am looking for a gene that can be used to prevent flooding in the eastern us area"}' \
+  http://127.0.0.1:5000/query

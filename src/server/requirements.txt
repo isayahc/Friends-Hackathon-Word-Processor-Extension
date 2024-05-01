@@ -9,3 +9,4 @@ wikipedia
 google-api-python-client>=2.100.0 # to access google tools
 flask
 gradio
+openai

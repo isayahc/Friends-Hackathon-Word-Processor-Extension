@@ -1,3 +1,4 @@
+from langchain.retrievers import PubMedRetriever
 from langchain.tools import BaseTool, StructuredTool, tool
 from langchain_community.retrievers import ArxivRetriever
 #from langchain_community.utilities import SerpAPIWrapper
@@ -15,6 +16,10 @@ from langchain_mistralai import ChatMistralAI
 from dotenv import load_dotenv
 import os
 from langchain_community.llms import HuggingFaceEndpoint
+# from langchain_community.llms.openai import OpenAIChat
+# from langchain_community.llms.openai import OpenAIChat
+from langchain_openai import ChatOpenAI
+
 from langchain.tools.render import render_text_description
 
 from langchain.agents import AgentExecutor
@@ -208,6 +213,22 @@ def google_search(query: str) -> str:
     
     return cleaner_sources.__str__()
 
+@tool
+def pub_med_search(query: str) -> str:
+    """Search Google for additional results when you can't answer questions using arxiv search or wikipedia search."""
+    global all_sources
+    search_results = PubMedRetriever()
+
+    # websearch = GoogleSearchAPIWrapper()
+    # search_results:dict = websearch.results(query, 3)
+    # cleaner_sources =format_search_results(search_results)
+    # parsed_csources = parse_list_to_dicts(cleaner_sources)
+    # add_many(parsed_csources)
+    all_sources += search_results    
+    
+    return search_results.__str__()
+
+
 # if __name__ == "__main__":
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
 HUGGINGFACEHUB_API_TOKEN = os.getenv('HUGGINGFACEHUB_API_TOKEN')
@@ -219,7 +240,9 @@ model = ChatMistralAI(model="mistral-large-latest")
 
 # chat = ChatMistralAI(api_key=MISTRAL_API_KEY)
 
-llm = HuggingFaceEndpoint(repo_id="mistralai/Mixtral-8x7B-Instruct-v0.1", 
+llm = HuggingFaceEndpoint(
+                        repo_id="mistralai/Mixtral-8x7B-Instruct-v0.1", 
+                        # repo_id="meta-llama/Meta-Llama-3-70B-Instruct", 
                         temperature=0.1, 
                         max_new_tokens=1024,
                         repetition_penalty=1.2,
@@ -231,12 +254,17 @@ llm = HuggingFaceEndpoint(repo_id="mistralai/Mixtral-8x7B-Instruct-v0.1",
 #     model_name="claude-3-opus-20240229",
 #     )
 
+llm = ChatOpenAI(
+    
+)
+
 tools = [
     # memory_search,
     # knowledgeBase_search,
-    # arxiv_search,
+    arxiv_search,
     wikipedia_search,
-    # google_search,
+    google_search,
+    pub_med_search,
 #    get_arxiv_paper,
     ]
 

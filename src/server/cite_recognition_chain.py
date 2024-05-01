@@ -22,7 +22,8 @@ output_parser = StructuredOutputParser.from_response_schemas(response_schemas)
 format_instructions = output_parser.get_format_instructions()
 
 prompt = maker_prompt = PromptTemplate(
-    template="You will be given a string of text and you must determine if the string is APA citation or not. Please repond 'yes' or 'no' Only repond 'yes' or 'no'\n{question}\n",
+    # template="You will be given a string of text and you must determine if the string is APA citation or not. Please repond 'yes' or 'no' Only repond 'yes' or 'no'\n{question}\n",
+    template="You are a researcher at a biotech laboratory with a speciality in Saccharomyces cerevisiae. You are also able to search the internet gor transgenes you can try from different organisms  \n{question}\n",
     # template="You must generate a well detailed list of items for creating a given item from scratch. \
     #     Also describe the purpose for a text-to-3d model to use for extra context\n{format_instructions}\n{question}\n{context}",
     input_variables=["question"],
@@ -72,10 +73,13 @@ if __name__ == "__main__":
     query_1 = "International Tennis Federation. (n.d.). Tennis. In Wikipedia. Retrieved March 22, 2023, from https://en.wikipedia.org/wiki/Tennis"
     query_2 = "Data analysist"
     query_3 = "Hi my name is jack the bozo"
+    # query_4 = "I am looking for a gene that can be used to prevent flooding in the eastern us area"
+    query_4 = "I am looking for a gene that can be used to prevent drought"
     # query_2 = "This is mw walking doen the street"
     
     
-    sample_1 = cite_chain.invoke(query_1)
-    sample_2 = cite_chain.invoke(query_2)
-    sample_3 = cite_chain.invoke(query_3)
+    # sample_1 = cite_chain.invoke(query_1)
+    # sample_2 = cite_chain.invoke(query_2)
+    # sample_3 = cite_chain.invoke(query_3)
+    sample_4 = cite_chain.invoke(query_4)
     x=0
