@@ -6,16 +6,16 @@ from langchain_openai import ChatOpenAI
 import json
 
 from langchain_core.agents import AgentActionMessageLog, AgentFinish
-from typing import List
+from typing import List, Dict
 
 from langchain_core.pydantic_v1 import BaseModel, Field
 
 class Response(BaseModel):
     """Final response to the question being asked"""
 
-    answer: str = Field(description="The final answer to respond to the user")
-    genes: List[str] = Field(
-        description="The list of genes one or many genes that can be used to solve the problem statement provide by the user"
+    reason: str = Field(description="the logic of the agent's choices")
+    genes: Dict[str,str] = Field(
+        description="The list of genes one or many genes that can be used to solve the problem statement provide by the user",
     )
 
 prompt = ChatPromptTemplate.from_messages(
