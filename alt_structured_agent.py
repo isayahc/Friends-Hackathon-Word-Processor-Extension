@@ -14,7 +14,7 @@ class Response(BaseModel):
     """Final response to the question being asked"""
 
     reason: str = Field(description="the logic of the agent's choices")
-    genes: Dict[str,str] = Field(
+    genes: str = Field(
         description="The list of genes one or many genes that can be used to solve the problem statement provide by the user",
     )
 
